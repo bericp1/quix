@@ -15,7 +15,7 @@ angular.module('quixApp', ['ngResource'])
         redirectTo: '/start'
       });
   }])
-  .directive('candystatus', function(){
+  .directive('candystatus', function () {
     return {
       restrict: 'C',
       replace: true,
@@ -23,8 +23,11 @@ angular.module('quixApp', ['ngResource'])
         'status': '@'
       },
       templateUrl: 'views/components/candystatus.html',
-      link: function(scope, element, attrs) {
+      link: function (scope, element, attrs) {
         //Add functionality to load status from server
+        console.log(scope);
+        console.log(element);
+        console.log(attrs);
       }
     };
   });

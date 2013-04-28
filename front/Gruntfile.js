@@ -232,7 +232,10 @@ module.exports = function (grunt) {
 						src: [
 							'*.{ico,txt}',
 							'.htaccess',
-							'components/**/*'
+							'components/**/*',
+              'fonts/**/*',
+              'images/**/*',
+              'views/**/*'
 						]
 					},
 					//USER Added to include all styles seperately (instead of cssmin)
