@@ -7,6 +7,8 @@ var pgConInfo = process.env.DATABASE_URL;
 
 var app = express();
 
+app.set('env', process.env.NODE_ENV);
+
 if ('production' == app.get('env')) {
   app.set('static dir', __dirname+'/public');
 }else{
