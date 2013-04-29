@@ -15,6 +15,10 @@ if ('production' == app.get('env')) {
   app.set('dev styles dir', __dirname+'/front/.tmp/styles');
 }
 
+console.log(app.get('static dir'));
+console.log(app.get('dev styles dir'));
+console.log(app.enabled('dev styles'));
+
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
