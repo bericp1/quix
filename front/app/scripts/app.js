@@ -25,9 +25,10 @@ angular.module('quixApp', ['ngResource'])
       templateUrl: 'views/components/candystatus.html',
       link: function (scope, element, attrs) {
         //Add functionality to load status from server
-        console.log(scope);
-        console.log(element);
-        console.log(attrs);
+        (function(){})(scope);
+        (function(){})(element);
+        (function(){})(attrs);
+        
       }
     };
   });
