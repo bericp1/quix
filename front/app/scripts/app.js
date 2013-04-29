@@ -28,7 +28,7 @@ angular.module('quixApp', ['ngResource'])
         (function(){})(scope);
         (function(){})(element);
         (function(){})(attrs);
-        
+        /*$.get("/");*/
       }
     };
   });
