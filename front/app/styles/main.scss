@@ -1,4 +1,9 @@
 @import "compass_twitter_bootstrap";
+@import "compass_twitter_bootstrap_responsive";
+$phone: "(max-width: 767px)";
+@import "start";
+@import "question";
+@import "answer";
 
 @font-face {
   font-family: 'Patrick Hand SC';
@@ -14,6 +19,9 @@ html, body{
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
+  @media #{$phone} {
+    overflow: auto;
+  }
 }
 
 body{
@@ -27,16 +35,35 @@ body{
     margin-top: 40px;
     margin-bottom: 20px;
     
+    @media #{$phone} {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 50px;
+      line-height: 50px;
+    }
+    
     div#sub{
       font-size: 16px;
       line-height: 20px;
       display: block;
+      
+      @media #{$phone} {
+        font-size: 14px;
+        line-height: 18px;
+      }
     }
   }
   
   #body{
+    position: relative;
+    
     height: 460px;
     background: url('../images/loading.gif') no-repeat center;
+    //font-family: 'Trebuchet MS';
+    
+    @media #{$phone} {
+      height: auto;
+    }
     
     &>*{
       width: 100%;
@@ -46,11 +73,35 @@ body{
   }
   
   #foot{
+    display: block;
     width: 400px;
     text-align: center;
     margin: 20px auto;
-    font-size: 15px;
+    font-size: 12px;
+    height: 20px;
+    
+    @media #{$phone} {
+      font-size: 10px;
+      line-height: 16px;
+      width: 100%;
+      margin: 0px !important;
+      padding: 7px 0px;
+    }
   }
 }
 
-//Import sass modules here
+.text-success{
+  color: green;
+}
+.text-info{
+  color: blue;
+}
+.text-error{
+  color: red;
+}
+
+.textfill span{
+  line-height: normal;
+  height: 100%;
+  vertical-align: middle;
+}
