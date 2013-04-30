@@ -1,1 +1,369 @@
-"use strict";angular.module("quixApp",["ngCookies"]).config(["$routeProvider",function(t){t.when("/start",{templateUrl:"views/start.html",controller:"StartCtrl"}).when("/admin",{templateUrl:"views/admin.html",controller:"AdminCtrl"}).when("/question",{templateUrl:"views/question.html",controller:"QuestionCtrl"}).when("/answer",{templateUrl:"views/answer.html",controller:"AnswerCtrl"}).otherwise({redirectTo:"/start"})}]).directive("candystatus",function(){return{restrict:"C",replace:!0,scope:{status:"@"},templateUrl:"views/components/candystatus.html",link:function(t,e,n){(function(){})(t),function(){}(e),function(){}(n);var s=function(){$.get("/candystatus",{},function(t){$(e.get(0)).find("span").text(t.status)},"json")};window.setInterval(s,1e4),s()}}}).run(function(t){t.$on("$routeChangeSuccess",function(){window.textFillUpdate()}),t.$on("UpdateTextFill",function(){window.textFillUpdate()})}),angular.module("quixApp").controller("AdminCtrl",["$scope",function(t){t.password="",t.AddQuestionCtrl=["$scope",function(t){t.question="",t.a="",t.b="",t.c="",t.d="",t.correct="",t.status="Ready!",t.statusClass="text-info",t.enabled=!0,t.add=function(){t.statusClass="text-info",t.enabled=!1,$.get("/admin/addquestion",{password:t.password,question:t.question,a:t.a,b:t.b,c:t.c,d:t.d,correct:t.correct},function(e){e.ok?(t.statusClass="text-success",t.status="Add SUCCESS!",t.question="",t.a="",t.b="",t.c="",t.d="",t.correct=""):(t.statusClass="text-error",t.status="Add FAILED: "+e.err),t.enabled=!0,t.$apply()},"json")}}],t.CandyStatusCtrl=["$scope",function(t){t.newstatus="",t.status="Ready!",t.statusClass="text-info",t.enabled=!0,t.change=function(){t.enabled=!1,t.status="Changing...",t.statusClass="text-info",$.get("/admin/changecandystatus",{password:t.password,status:t.newstatus},function(e){e.ok?(t.newstatus="",t.status="Change SUCCESS!",t.statusClass="text-success"):(t.status="Change FAILED: "+e.err,t.statusClass="text-error",console.log(e.err)),t.enabled=!0,t.$apply()},"json")}}],t.QuestionReenableCtrl=["$scope",function(t){t.status="Ready!",t.statusClass="text-info",t.enabled=!0,t.reenable=function(){t.enabled=!1,t.status="Re-Enableing...",t.statusClass="text-info",$.get("/admin/reenablequestions",{password:t.password},function(e){e.ok?(t.newstatus="",t.status="Re-Enable SUCCESS!",t.statusClass="text-success"):(t.status="Re-Enable FAILED: "+e.err,t.statusClass="text-error",console.log(e.err)),t.enabled=!0,t.$apply()},"json")}}]}]),angular.module("quixApp").controller("StartCtrl",["$scope","$location",function(t,e){(function(){})(t),function(){}(e),t.goTo=function(t){e.path("/"+t)}}]),angular.module("quixApp").controller("QuestionCtrl",["$scope",function(t){t.currentQuestionId=-1,t.currentQuestionText="Loading next question...",t.answerTextA="",t.answerTextB="",t.answerTextC="",t.answerTextD="",t.loading=!0;var e=function(){$.get("/new_question",{},function(e){e.ok?(t.currentQuestionId=e.id,t.currentQuestionText=e.question,t.answerTextA=e.answers.A,t.answerTextB=e.answers.B,t.answerTextC=e.answers.C,t.answerTextD=e.answers.D,t.correct=e.answers.correct,t.loading=!1):(t.currentQuestionId=-1,t.currentQuestionText="Something went wrong.",e.humanErr&&(t.currentQuestionText=e.humanErr),t.answerTextA="",t.answerTextB="",t.answerTextC="",t.answerTextD="",t.correct="",t.loading=!1,console.log(e.err)),t.$apply()})};e();var n=50;Modernizr.touch&&(n=2e3),window.setInterval(function(){window.textFillUpdate()},n)}]),angular.module("quixApp").controller("AnswerCtrl",["$scope","$cookieStore","$window",function(t,e,n){(function(){})(t),t.ok=!0,t.status="Loading...",t.questionId=-1,t.correct="",t.state="loading",t.update=function(e){$.get("/current_question",{},function(n){n.ok?(t.ok=!0,t.questionId=n.id,t.correct=n.answers.correct):(t.ok=!1,t.questionId=-1,t.correct="",t.status="<br><h2>Something went wrong. Try refreshing.</h2>",n.humanErr&&(t.status="<h2>"+n.humanErr+'</h2><button class="btn btn-blk" onclick="window.location.reload();">Refresh</button>'),t.state="loading"),t.$apply(),e()})},t.update(function(){t.ok&&(e.get("hasPlayed")&&parseInt(e.get("hasPlayed"),10)===parseInt(t.questionId,10)?(t.state="loading",t.status='<h2>Wait until the next question.</h2><button class="btn btn-blk" onclick="window.location.reload();">Refresh</button>'):(t.$apply(function(){e.remove("hasPlayed")}),t.state="answers"),t.$apply())}),t.check=function(n){t.state="loading",t.update(function(){t.ok&&(t.correct.toLowerCase()===n.toLowerCase()?(t.state="winner",window.setTimeout(function(){t.$apply(function(){t.refresh()})},6e4)):t.state="loser",t.$apply(function(){e.put("hasPlayed",parseInt(t.questionId,10))}),t.$apply())})},t.refresh=function(){n.location.reload()}}]),window.textFillUpdate=function(t){var e=t||86;$(".textfill").each(function(t,n){$(n).textfill({maxFontPixels:e})})};
+'use strict';
+
+angular.module('quixApp', ['ngCookies'])
+  .config(['$routeProvider', function ($routeProvider) {
+    $routeProvider
+      .when('/start', {
+        templateUrl: 'views/start.html',
+        controller: 'StartCtrl'
+      })
+      .when('/admin', {
+        templateUrl: 'views/admin.html',
+        controller: 'AdminCtrl'
+      })
+      .when('/question', {
+        templateUrl: 'views/question.html',
+        controller: 'QuestionCtrl'
+      })
+      .when('/answer', {
+        templateUrl: 'views/answer.html',
+        controller: 'AnswerCtrl'
+      })
+      .otherwise({
+        redirectTo: '/start'
+      });
+
+  }])
+  .directive('candystatus', function () {
+    return {
+      restrict: 'C',
+      replace: true,
+      scope: {
+        'status': '@'
+      },
+      templateUrl: 'views/components/candystatus.html',
+      link: function (scope, element, attrs) {
+        //Add functionality to load status from server
+        (function () {})(scope);
+        (function () {})(element);
+        (function () {})(attrs);
+        var cs = function(){
+          $.get('/candystatus', {}, function(data){
+            $(element.get(0)).find('span').text(data.status); //This is not OK too do in the model
+          }, 'json');
+        };
+        window.setInterval(cs, 10000);
+        cs();
+      }
+    };
+  })
+  .run(function($rootScope){
+
+    $rootScope.$on('$routeChangeSuccess', function(){
+      window.textFillUpdate();
+    });
+
+    $rootScope.$on('UpdateTextFill', function(){
+      window.textFillUpdate();
+    });
+
+  });
+
+'use strict';
+
+angular.module('quixApp')
+.controller('AdminCtrl', ['$scope', function ($scope) {
+  $scope.password = '';
+
+  $scope.AddQuestionCtrl = ['$scope', function($scope){
+    $scope.question = '';
+    $scope.a = '';
+    $scope.b = '';
+    $scope.c = '';
+    $scope.d = '';
+    $scope.correct = '';
+    $scope.status = 'Ready!';
+    $scope.statusClass = 'text-info';
+    $scope.enabled = true;
+
+    $scope.add = function(){
+
+      $scope.statusClass = 'text-info';
+      $scope.enabled = false;
+      $.get('/admin/addquestion', {
+        password: $scope.password,
+        question: $scope.question,
+        a: $scope.a,
+        b: $scope.b,
+        c: $scope.c,
+        d: $scope.d,
+        correct: $scope.correct
+      }, function(data){
+        if(data.ok){
+          $scope.statusClass = 'text-success';
+          $scope.status = 'Add SUCCESS!';
+          $scope.question = '';
+          $scope.a = '';
+          $scope.b = '';
+          $scope.c = '';
+          $scope.d = '';
+          $scope.correct = '';
+        }else{
+          $scope.statusClass = 'text-error';
+          $scope.status = 'Add FAILED: ' + data.err;
+        }
+        $scope.enabled = true;
+        $scope.$apply();
+      }, 'json');
+
+    };
+  }];
+
+  $scope.CandyStatusCtrl = ['$scope', function($scope){
+
+    $scope.newstatus = '';
+    $scope.status = 'Ready!';
+    $scope.statusClass = 'text-info';
+    $scope.enabled = true;
+
+    $scope.change = function(){
+
+      $scope.enabled = false;
+      $scope.status = 'Changing...';
+      $scope.statusClass = 'text-info';
+
+      $.get('/admin/changecandystatus', {
+        password: $scope.password,
+        status: $scope.newstatus
+      }, function(data){
+        if(data.ok){
+          $scope.newstatus = '';
+          $scope.status = 'Change SUCCESS!';
+          $scope.statusClass = 'text-success';
+        }else{
+          $scope.status = 'Change FAILED: ' + data.err;
+          $scope.statusClass = 'text-error';
+          console.log(data.err);
+        }
+        $scope.enabled = true;
+        $scope.$apply();
+      }, 'json');
+
+    };
+  }];
+
+  $scope.QuestionReenableCtrl = ['$scope', function($scope){
+
+    $scope.status = 'Ready!';
+    $scope.statusClass = 'text-info';
+    $scope.enabled = true;
+
+    $scope.reenable = function(){
+      $scope.enabled = false;
+      $scope.status = 'Re-Enableing...';
+      $scope.statusClass = 'text-info';
+
+      $.get('/admin/reenablequestions', {
+        password: $scope.password
+      }, function(data){
+        if(data.ok){
+          $scope.newstatus = '';
+          $scope.status = 'Re-Enable SUCCESS!';
+          $scope.statusClass = 'text-success';
+        }else{
+          $scope.status = 'Re-Enable FAILED: ' + data.err;
+          $scope.statusClass = 'text-error';
+          console.log(data.err);
+        }
+        $scope.enabled = true;
+        $scope.$apply();
+      }, 'json');
+    };
+  }];
+}]);
+
+'use strict';
+
+angular.module('quixApp')
+.controller('StartCtrl', ['$scope', '$location', function ($scope, $location) {
+
+  (function () {})($scope);
+  (function () {})($location);
+
+  $scope.goTo = function(whereto){
+    $location.path('/' + whereto);
+  };
+
+}]);
+
+'use strict';
+
+angular.module('quixApp')
+.controller('QuestionCtrl', ['$scope', function ($scope) {
+
+  $scope.currentQuestionId    = -1;
+  $scope.currentQuestionText  = 'Loading next question...';
+  $scope.answerTextA = '';
+  $scope.answerTextB = '';
+  $scope.answerTextC = '';
+  $scope.answerTextD = '';
+  $scope.loading = true;
+
+  var newQuestion = function(){
+    $.get(
+      '/new_question',
+      {},
+      function (data) {
+        if(data.ok){
+          $scope.currentQuestionId = data.id;
+          $scope.currentQuestionText = data.question;
+          $scope.answerTextA = data.answers.A;
+          $scope.answerTextB = data.answers.B;
+          $scope.answerTextC = data.answers.C;
+          $scope.answerTextD = data.answers.D;
+          $scope.correct = data.answers.correct;
+          $scope.loading = false;
+        }else{
+          $scope.currentQuestionId = -1;
+          $scope.currentQuestionText = 'Something went wrong.';
+          if(data.humanErr){
+            $scope.currentQuestionText = data.humanErr;
+          }
+          $scope.answerTextA = '';
+          $scope.answerTextB = '';
+          $scope.answerTextC = '';
+          $scope.answerTextD = '';
+          $scope.correct = '';
+          $scope.loading = false;
+          console.log(data.err);
+        }
+        $scope.$apply();
+      }
+    );
+  };
+
+/*  var updateQuestion = function(){
+    $.get(
+      '/current_question',
+      {},
+      function (data) {
+        if(data.ok){
+          $scope.currentQuestionId = data.id;
+          $scope.currentQuestionText = data.question;
+          $scope.answerTextA = data.answers.A;
+          $scope.answerTextB = data.answers.B;
+          $scope.answerTextC = data.answers.C;
+          $scope.answerTextD = data.answers.D;
+          $scope.correct = data.answers.correct;
+          $scope.loading = false;
+        }else{
+          $scope.currentQuestionId = -1;
+          $scope.currentQuestionText = 'Something went wrong.';
+          if(data.humanErr){
+            $scope.currentQuestionText = data.humanErr;
+          }
+          $scope.answerTextA = '';
+          $scope.answerTextB = '';
+          $scope.answerTextC = '';
+          $scope.answerTextD = '';
+          $scope.correct = '';
+          $scope.loading = false;
+          console.log(data.err);
+        }
+        $scope.$apply();
+      }
+    );
+  }; */
+
+  newQuestion();
+
+  var duration = 50;
+  if (Modernizr.touch){
+    duration = 2000;
+  }
+  window.setInterval(function () {
+    window.textFillUpdate();
+  }, duration);
+
+}]);
+'use strict';
+
+angular.module('quixApp')
+.controller('AnswerCtrl', ['$scope', '$cookieStore', '$window', function ($scope, $cookieStore, $window) {
+
+  (function () {})($scope);
+
+  $scope.ok = true;
+  $scope.status = 'Loading...';
+  $scope.questionId = -1;
+  $scope.correct = '';
+
+  $scope.state = 'loading';
+
+  $scope.update = function(callback){
+    $.get('/current_question',
+      {},
+      function(data){
+        if(data.ok){
+          $scope.ok = true;
+          $scope.questionId = data.id;
+          $scope.correct = data.answers.correct;
+        }else{
+          $scope.ok = false;
+          $scope.questionId = -1;
+          $scope.correct = '';
+          $scope.status = '<br><h2>Something went wrong. Try refreshing.</h2>';
+          if(data.humanErr){
+            $scope.status = '<h2>' + data.humanErr + '</h2><button class="btn btn-blk" onclick="window.location.reload();">Refresh</button>';
+          }
+          $scope.state = 'loading';
+        }
+        $scope.$apply();
+        callback();
+      }
+    );
+  };
+
+  $scope.update(function () {
+
+    if($scope.ok){
+      if($cookieStore.get('hasPlayed') && (parseInt($cookieStore.get('hasPlayed'), 10) === parseInt($scope.questionId, 10))){
+        $scope.state = 'loading';
+        $scope.status = '<h2>Wait until the next question.</h2><button class="btn btn-blk" onclick="window.location.reload();">Refresh</button>';
+      }else{
+        $scope.$apply(function(){
+          $cookieStore.remove('hasPlayed');
+        });
+        $scope.state = 'answers';
+      }
+      $scope.$apply();
+    }
+
+  });
+
+  $scope.check = function (answer) {
+    $scope.state = 'loading';
+    $scope.update(function () {
+      if($scope.ok){
+        if($scope.correct.toLowerCase() === answer.toLowerCase()){
+          $scope.state = 'winner';
+          window.setTimeout(function () {
+            $scope.$apply(function () {
+              $scope.refresh();
+            });
+          }, 60000);
+        }else{
+          $scope.state = 'loser';
+        }
+        $scope.$apply(function(){
+          $cookieStore.put('hasPlayed', parseInt($scope.questionId, 10));
+        });
+        $scope.$apply();
+      }
+    });
+  };
+
+  $scope.refresh = function(){
+    $window.location.reload();
+  };
+
+}]);
+
+'use strict';
+
+window.textFillUpdate = function(max){
+  var nMax = max || 86;
+  $('.textfill').each(function (i,e) {
+    $(e).textfill({maxFontPixels: nMax});
+  });
+};
