@@ -109,4 +109,32 @@ angular.module('quixApp')
       }, 'json');
     };
   }];
+
+  $scope.NextQuestionCtrl = ['$scope', function($scope){
+
+    $scope.status = 'Ready!';
+    $scope.statusClass = 'text-info';
+    $scope.enabled = true;
+
+    $scope.nextQuestion = function () {
+      $scope.enabled = false;
+      $scope.status = 'Setting up next question...';
+      $scope.statusClass = 'text-info';
+
+      $.get('/new_question',
+      {},
+      function(data){
+        if(data.ok){
+          $scope.status = 'SUCCESS!';
+          $scope.statusClass = 'text-success';
+        }else{
+          $scope.status = 'FAILED: ' + data.err;
+          $scope.statusClass = 'text-error';
+          console.log(data.err);
+        }
+        $scope.enabled = true;
+        $scope.$apply();
+      }, 'json');
+    };
+  }];
 }]);
