@@ -1,3 +1,4 @@
 node_modules
 start
 stop
+*.dump
