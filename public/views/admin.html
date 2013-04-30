@@ -1,0 +1,54 @@
+<div style="overflow-y: scroll;">
+
+  <div class="row-fluid">
+    <div class="span2 offset5">
+      <input type="password" placeholder="Password" id="password" ng-model="password">
+    </div>
+  </div>
+  <div class="row-fluid">
+  
+    <div class="span2 offset3" ng-controller="AddQuestionCtrl">
+      <form onsubmit="return false;">
+        <fieldset>
+          <legend>Add Question</legend>
+          <label>Question:</label>
+          <input type="text" placeholder="Question" ng-model="question">
+          <label>Answers:</label>
+          <fieldset>
+            <input type="text" placeholder="Answer A" ng-model="a">
+            <input type="text" placeholder="Answer B" ng-model="b">
+            <input type="text" placeholder="Answer C" ng-model="c">
+            <input type="text" placeholder="Answer D" ng-model="d">
+          </fieldset>
+          <input type="text" placeholder="Correct Answer" ng-model="correct">
+          <button class="btn btn-block btn-primary" ng-click="add()" ng-disabled="!enabled">Add</button>
+        </fieldset>
+      </form>
+      <p ng-class="statusClass" class="text-center" ng-bind="status"></p>
+    </div>
+    
+    <div class="span2" ng-controller="CandyStatusCtrl">
+      <form onsubmit="return false;">
+        <fieldset>
+          <legend>Change Candy Status</legend>
+          <label class="text-center">There is</label>
+          <input type="text" placeholder="..." ng-model="newstatus">
+          <label class="text-center">candy left.</label>
+          <button class="btn btn-block btn-primary" ng-click="change()" ng-disabled="!enabled">Change</button>
+        </fieldset>
+      </form>
+      <p ng-class="statusClass" class="text-center" ng-bind="status"></p>
+    </div>
+    
+    <div class="span2" ng-controller="QuestionReenableCtrl">
+      <form onsubmit="return false;">
+        <fieldset>
+          <legend>Re-Enable Questions</legend>
+          <button class="btn btn-block btn-primary" ng-click="reenable()" ng-disabled="!enabled">Re-Enable</button>
+        </fieldset>
+      </form>
+      <p ng-class="statusClass" class="text-center" ng-bind="status"></p>
+    </div>
+    
+  </div>
+</div>

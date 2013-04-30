@@ -299,9 +299,9 @@ module.exports = function (grunt) {
     'concat',
     'copy',
     'cdnify',
-    'usemin',
-    'ngmin',
-    'uglify'
+    'usemin'//,
+//    'ngmin',
+//    'uglify'
   ]);
 
   grunt.registerTask('default', ['build']);
