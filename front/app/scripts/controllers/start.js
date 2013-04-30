@@ -6,6 +6,8 @@ angular.module('quixApp')
   (function () {})($scope);
   (function () {})($location);
 
+  $scope.blockViewing = true;
+
   $scope.goTo = function(whereto){
     $location.path('/' + whereto);
   };

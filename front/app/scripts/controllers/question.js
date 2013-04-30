@@ -11,9 +11,12 @@ angular.module('quixApp')
   $scope.answerTextD = '';
   $scope.loading = true;
 
-  var newQuestion = function(){
+
+
+  var update = function(m){
+    var method = m || 'current';
     $.get(
-      '/new_question',
+      '/' + method + '_question',
       {},
       function (data) {
         if(data.ok){
@@ -44,40 +47,7 @@ angular.module('quixApp')
     );
   };
 
-/*  var updateQuestion = function(){
-    $.get(
-      '/current_question',
-      {},
-      function (data) {
-        if(data.ok){
-          $scope.currentQuestionId = data.id;
-          $scope.currentQuestionText = data.question;
-          $scope.answerTextA = data.answers.A;
-          $scope.answerTextB = data.answers.B;
-          $scope.answerTextC = data.answers.C;
-          $scope.answerTextD = data.answers.D;
-          $scope.correct = data.answers.correct;
-          $scope.loading = false;
-        }else{
-          $scope.currentQuestionId = -1;
-          $scope.currentQuestionText = 'Something went wrong.';
-          if(data.humanErr){
-            $scope.currentQuestionText = data.humanErr;
-          }
-          $scope.answerTextA = '';
-          $scope.answerTextB = '';
-          $scope.answerTextC = '';
-          $scope.answerTextD = '';
-          $scope.correct = '';
-          $scope.loading = false;
-          console.log(data.err);
-        }
-        $scope.$apply();
-      }
-    );
-  }; */
-
-  newQuestion();
+  update();
 
   var duration = 50;
   if (Modernizr.touch){
@@ -87,4 +57,8 @@ angular.module('quixApp')
     window.textFillUpdate();
   }, duration);
 
+
+  window.setInterval(function () {
+    update();
+  }, 5000);
 }]);
