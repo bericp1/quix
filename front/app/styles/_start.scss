@@ -1,0 +1,36 @@
+#start-view{
+  margin: 0 auto;
+  max-width: 500px;
+  
+  h1{
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  button{
+    width: 220px;
+    height: 220px;
+    font-size: 30px;
+    line-height: 30px;
+    margin: 0px;
+    
+    &.left{
+      float: left;
+    }
+    &.right{
+      float: right;
+    }
+    
+    @media #{$phone} {
+      font-size: 18px;
+      line-height: 18px;
+      margin: 0px 5px;
+      width: 45%;
+    }
+  }
+  div.clear{
+    width: 30px;
+    height: 30px;
+    clear: both;
+  }
+}

@@ -1,0 +1,55 @@
+<div id="question-view" ng-hide="loading">
+
+  <div id="question-box" class="textfill">
+    <span ng-bind-html-unsafe="currentQuestionText"></span>
+  </div>
+
+  <div id="answers-box">
+
+      <div class="well answer-left answer">
+        <div class="answer-letter textfill">
+          <span>A</span>
+        </div>
+        <div class="answer-text textfill">
+          <span ng-bind-html-unsafe="answerTextA"></span>
+        </div>
+      </div>
+
+      <div class="well answer-right answer">
+        <div class="answer-letter textfill">
+          <span>B</span>
+        </div>
+        <div class="answer-text textfill">
+          <span ng-bind-html-unsafe="answerTextB"></span>
+        </div>
+      </div>
+
+      <div class="well answer-left answer">
+        <div class="answer-letter textfill">
+          <span>C</span>
+        </div>
+        <div class="answer-text textfill">
+          <span ng-bind-html-unsafe="answerTextC"></span>
+        </div>
+      </div>
+
+      <div class="well answer-right answer">
+        <div class="answer-letter textfill">
+          <span>D</span>
+        </div>
+        <div class="answer-text textfill">
+          <span ng-bind-html-unsafe="answerTextD"></span>
+        </div>
+      </div>
+
+  </div>
+
+  <div id="info-box" class="textfill">
+    <span>To answer these questions and win candy, just go to <em>goo.gl/kW4Nr</em> on your phone/tablet.</span>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  window.textFillUpdate();
+</script>

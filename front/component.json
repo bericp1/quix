@@ -11,6 +11,8 @@
   },
   "devDependencies": {
     "angular-mocks": "~1.0.5",
-    "angular-scenario": "~1.0.5"
+    "angular-scenario": "~1.0.5",
+    "jquery": "~2.0.0",
+    "jquery-textfill": "git://github.com/jquery-textfill/jquery-textfill.git#~0.3.4"
   }
 }
