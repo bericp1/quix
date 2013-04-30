@@ -4,7 +4,7 @@ angular.module('quixApp')
 .controller('AdminCtrl', ['$scope', function ($scope) {
   $scope.password = '';
 
-  $scope.AddQuestionCtrl = function($scope){
+  $scope.AddQuestionCtrl = ['$scope', function($scope){
     $scope.question = '';
     $scope.a = '';
     $scope.b = '';
@@ -46,9 +46,9 @@ angular.module('quixApp')
       }, 'json');
 
     };
-  };
+  }];
 
-  $scope.CandyStatusCtrl = function($scope){
+  $scope.CandyStatusCtrl = ['$scope', function($scope){
 
     $scope.newstatus = '';
     $scope.status = 'Ready!';
@@ -79,9 +79,9 @@ angular.module('quixApp')
       }, 'json');
 
     };
-  };
+  }];
 
-  $scope.QuestionReenableCtrl = function($scope){
+  $scope.QuestionReenableCtrl = ['$scope', function($scope){
 
     $scope.status = 'Ready!';
     $scope.statusClass = 'text-info';
@@ -108,5 +108,5 @@ angular.module('quixApp')
         $scope.$apply();
       }, 'json');
     };
-  };
+  }];
 }]);
