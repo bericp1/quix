@@ -61,4 +61,12 @@ angular.module('quixApp')
   window.setInterval(function () {
     update();
   }, 5000);
+
+  if(window.questionIntervalId){
+    window.clearInterval(window.questionIntervalId);
+  }
+
+  window.questionIntervalId = window.setInterval(function(){
+    update('new');
+  }, 60000);
 }]);
